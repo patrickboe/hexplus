@@ -1,0 +1,16 @@
+app_engine_application: hexpl-us
+configuration: 
+ #uncomment one:
+ debug
+ #release
+site_name: hexpl.us
+google_api_key: ABQIAAAABYlRyNYUhba29cQamRPQKBR8ulp0qGQo-uK4cerJzxtvcpEfYhQUvUPW8MsKBdPRILeaaD87k6iEfw
+app_engine_path: /opt/google/appengine
+app_engine_python_executable: python2.5
+app_engine_portnum: 8080
+live: {
+ media_loc: "http://media.hexpl.us"
+}
+local: {
+ media_loc: /media
+}
