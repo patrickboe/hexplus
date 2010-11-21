@@ -1,3 +1,11 @@
+/*!
+ * hexpl.us application 11/21/2010
+ * 
+ * Copyright (c) 2010 Patrick Boe
+ * Dual licensed under the MIT and GPL licenses.
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
+ */
 var hexplus=function(){
 	var colorBackground=function(color){
 		$('body').css({background: color});
@@ -100,22 +108,41 @@ var hexplus=function(){
 		return ret;
 	};
 	
-	var routeHashContent=function(winHash){
-		var hcont=winHash.substr(1);
-		var n=parseInput(hcont);
-		if(!n){
-			//assume this is a color name
-			colorBackground(hcont);
-			n=parseInput(rgbToHex($('body').css("background-color")));
-			describeColor(n.hex);
-		} else if(isColor(n.hex)){
-			colorBackground('#'+n.hex);
-			describeColor(n.hex);
-		} else {
-			colorBackground('#FFFFFF');
-			describeColorless();
+	var describeNamedColor=function(name){
+		var renderedColor;
+		var previousColor=$('body').css("background-color");
+		colorBackground(name);
+		renderedColor=$('body').css("background-color");
+		if(renderedColor===previousColor && name!=='white'){
+			return blank();
 		}
+		n=parseInput(rgbToHex(renderedColor));
+		describeColor(n.hex);
 		describeNumber(n);
+	};
+	
+	var describeHexColor=function(n){
+		colorBackground('#'+n.hex);
+		describeNumber(n);
+		describeColor(n.hex);
+	};
+	
+	var describeNumberOnly=function(n){
+		colorBackground('#FFFFFF');
+		describeColorless();
+		describeNumber(n);
+	};
+	
+	var routeHashContent=function(winHash){
+		var hashBody=winHash.substr(1);
+		var n=parseInput(hashBody);
+		if(!n){
+			describeNamedColor(hashBody);
+		} else if(isColor(n.hex)){
+			describeHexColor(n);
+		} else {
+			describeNumberOnly(n);
+		}
 	};
 	var decChunk=function(hex,i){
 		return parseInt(hex.substr(i,2),16).toString();
@@ -143,6 +170,12 @@ var hexplus=function(){
 		var norm=normalizeColorHex(hex);
 		$('#rgb').text(decChunk(norm,0)+' '+decChunk(norm,2)+' '+decChunk(norm,4));
 	};
+	var blank=function(){
+		colorBackground('white');
+		describeColorless();
+		$('#hex').text('none');
+		$('#decimal').text('none');
+	};
 	var describeNumber=function(nInfo){
 		$('#hex').text(nInfo.hex);
 		$('#decimal').text(nInfo.dec);
@@ -151,11 +184,19 @@ var hexplus=function(){
 		var winHash=window.location.hash;
 		if(winHash.length>1){
 			routeHashContent(winHash);
+		} else {
+			blank();
 		}
 	};
+	var updateHash=function(){
+		window.location.hash=$(this).val();
+	};
 	
-	$(window).hashchange(routeHash);
-	routeHash();
+	$(function(){
+		$(window).hashchange(routeHash);
+		routeHash();
+		$('#query').bind("textchange",updateHash);
+	});
 };
 
 hexplus();

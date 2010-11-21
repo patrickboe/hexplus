@@ -1,29 +1,31 @@
 <!DOCTYPE html> 
 <html lang="en"> 
 	<head> 
-		<meta charset="utf-8" /> 
-		<title>hexpl.us</title> 
+		<meta charset="utf-8" />
+		<meta name="keywords" content="color,conversion,hexadecimal,css"/> 
+		<meta name="description" content="Enter a hex, color, or decimal value into the url hash to see conversions"/> 
+		<title>hexpl.us: color and hex lookup by url</title> 
 		<link type="text/css" rel="stylesheet" href="media/css/hex.css"/>
 	</head> 
 	<body>
 		<h1>hexpl.us</h1>
-		<h2>url-based hex lookup</h2>
-		<div id="description">
-			<label for="hex">Hexadecimal:</label><span id="hex"></span>
-			<label for="decimal">Decimal:</label><span id="decimal"></span>
-			<label for="rgb">RGB:</label><span id="rgb"></span>
-		</div>
-		<p>
-			Enter a hex you want to look up in the url, like <code>http://hexpl.us#ffffaa</code> to see the hex's color, RGB value, and decimal value.
-		</p>
-		<p> 
-			Enter a decimal value beginning with a 't,' like <code>http://hexpl.us#t98</code> to see the hex value. 
-		</p>
-		<p> 
-			Enter a color name, like <code>http://hexpl.us#navy</code> to see the color, RGB value, hex value, and decimal value. 
-		</p>
+		<h2>color and hex lookup by url</h2>
+		<ul id="description">
+			<li>
+			<label for="hex">Hexadecimal:</label> <span id="hex"></span>
+			</li><li>
+			<label for="decimal">Decimal:</label> <span id="decimal"></span>
+			</li><li>
+			<label for="rgb">RGB:</label> <span id="rgb"></span>
+			</li>
+		</ul>
+		<label for="query">look up:</label>
+		<input type="text" id="query" title="hex, color name, or decimal value"/>
+		<p>You can look up decimal values by putting a <code>t</code> at the beginning, e.g. <code>t128</code></p>
+		<footer>&copy; 2010 Patrick Boe</footer>
 		<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAABYlRyNYUhba29cQamRPQKBR8ulp0qGQo-uK4cerJzxtvcpEfYhQUvUPW8MsKBdPRILeaaD87k6iEfw"></script> 
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script> 
+		<script type="text/javascript" src="media/js/jquery.textchange.min.js"></script>
 		<script type="text/javascript" src="media/js/jquery.ba-hashchange.min.js"></script>
 		<script type="text/javascript" src="media/js/hex.js"></script>
 	</body>
