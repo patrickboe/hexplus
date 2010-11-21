@@ -67,7 +67,7 @@ var hexplus=function(){
 		if(hexString.length===2){
 			return hexString;
 		}
-		return "0" & hexString;
+		return "0" + hexString;
 	};
 	
 	var toHexString=function(v){
@@ -76,7 +76,7 @@ var hexplus=function(){
 	
 	var parseInput=function(input){
 		var n,hex,dec;
-		if(input.length>1 && input.substring(0)==='t'){
+		if(input.length>1 && input.charAt(0)==='t'){
 			dec=input.substr(1);
 			n=parseInt(dec);
 			return compile(n,
@@ -90,12 +90,16 @@ var hexplus=function(){
 					function(v){return v.toString();});
 		}
 	};
+	
 	var isColor=function(hex){
 		return hex.length===6 || hex.length===3;
 	};
+	
 	var rgbToHex=function(rgb){
-		return map(toPaddedHex,toRGBParts(rgb)).join('');
+		var ret= map(toPaddedHex,toRGBParts(rgb)).join('');
+		return ret;
 	};
+	
 	var routeHashContent=function(winHash){
 		var hcont=winHash.substr(1);
 		var n=parseInput(hcont);
@@ -121,15 +125,23 @@ var hexplus=function(){
 	};
 	var describeColorless=function(){
 		$('#rgb').text('none');
-		$('#short').text('none');
+	};
+	var twice=function(c){
+		return c + c;
+	};
+	var normalizeColorHex=function(hex){
+		var ret="";
+		if(hex.length!==3){
+			return hex;
+		}
+		for(i=0;i<3;i++){
+			ret+=twice(hex.charAt(i))
+		}
+		return ret;
 	};
 	var describeColor=function(hex){
-		$('#rgb').text(decChunk(hex,0)+' '+decChunk(hex,2)+' '+decChunk(hex,4));
-		if(isDoubleChunk(hex,0) && isDoubleChunk(hex,2) && isDoubleChunk(hex,4)){
-			$('#short').text('#'+hex.charAt(0)+hex.charAt(2)+hex.charAt(4));
-		} else {
-			$('#short').text('none');
-		}
+		var norm=normalizeColorHex(hex);
+		$('#rgb').text(decChunk(norm,0)+' '+decChunk(norm,2)+' '+decChunk(norm,4));
 	};
 	var describeNumber=function(nInfo){
 		$('#hex').text(nInfo.hex);
