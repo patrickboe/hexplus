@@ -5,7 +5,8 @@
 		<meta name="keywords" content="color,conversion,hexadecimal,css"/> 
 		<meta name="description" content="Enter a hex, color, or decimal value into the url hash to see conversions"/> 
 		<title>hexpl.us: color and hex lookup by url</title> 
-		<link type="text/css" rel="stylesheet" href="media/css/hex.css"/>
+		<link rel="shortcut icon" type="image/png" href="$CONF_media_loc/images/favicon.png">
+		<link type="text/css" rel="stylesheet" href="$CONF_media_loc/css/hex.css"/>
 	</head> 
 	<body>
 		<h1>hexpl.us</h1>
@@ -23,10 +24,8 @@
 		<input type="text" id="query" title="hex, color name, or decimal value"/>
 		<p>You can look up decimal values by putting a <code>t</code> at the beginning, e.g. <code>t128</code></p>
 		<footer>&copy; 2010 Patrick Boe</footer>
-		<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAABYlRyNYUhba29cQamRPQKBR8ulp0qGQo-uK4cerJzxtvcpEfYhQUvUPW8MsKBdPRILeaaD87k6iEfw"></script> 
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script> 
-		<script type="text/javascript" src="media/js/jquery.textchange.min.js"></script>
-		<script type="text/javascript" src="media/js/jquery.ba-hashchange.min.js"></script>
-		<script type="text/javascript" src="media/js/hex.js"></script>
+		<script type="text/javascript" src="http://www.google.com/jsapi?key=$CONF_google_api_key"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+		<script type="text/javascript" src="$CONF_media_loc/js/app-$CONF_version_name.js"></script>
 	</body>
 </html>

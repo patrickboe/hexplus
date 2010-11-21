@@ -1,0 +1,24 @@
+application: $CONF_app_engine_application
+version: $CONF_version_name
+runtime: python
+api_version: 1
+
+handlers:
+- url: (/favicon\.ico)
+  expiration: "365d"
+  upload: media/images/favicon.ico
+  static_files: media/images\1
+
+- url: (/(media/)?robots\.txt)
+  expiration: "365d"
+  upload: media/data/robots.txt
+  static_files: media/data/robots.txt
+  
+- url: /media
+  static_dir: media
+  expiration: "365d"
+  
+- url: /
+  upload: content/index.html
+  static_files: content/index.html
+  mime_type: text/html
