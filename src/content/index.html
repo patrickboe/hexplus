@@ -2,8 +2,8 @@
 <html lang="en"> 
 	<head> 
 		<meta charset="utf-8" />
-		<meta name="keywords" content="color,conversion,hexadecimal,css"/> 
-		<meta name="description" content="Enter a hex, color, or decimal value into the url hash to see conversions"/> 
+		<meta name="keywords" content="conversion,hexadecimal,programming,css,design"/> 
+		<meta name="description" content="Enter a hex, color, or decimal value into the url hash to see conversions."/> 
 		<title>hexpl.us: color and hex lookup by url</title> 
 		<link rel="shortcut icon" type="image/png" href="$CONF_media_loc/images/favicon.png">
 		<link type="text/css" rel="stylesheet" href="$CONF_media_loc/css/hex.css"/>
@@ -11,6 +11,8 @@
 	<body>
 		<h1>hexpl.us</h1>
 		<h2>color and hex lookup by url</h2>
+		<label for="query">look up:</label>
+		<input type="text" id="query" title="hex, color name, or decimal value"/>
 		<ul id="description">
 			<li>
 			<label for="hex">Hexadecimal:</label> <span id="hex"></span>
@@ -20,8 +22,6 @@
 			<label for="rgb">RGB:</label> <span id="rgb"></span>
 			</li>
 		</ul>
-		<label for="query">look up:</label>
-		<input type="text" id="query" title="hex, color name, or decimal value"/>
 		<p>You can look up decimal values by putting a <code>t</code> at the beginning, e.g. <code>t128</code></p>
 		<footer>
 		&copy; 2010 Patrick Boe

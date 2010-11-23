@@ -34,28 +34,27 @@ var hexplus=function(){
 	};
 	
 	var toRGBPart=function(segment){
-		return parseInt($.trim(segment));
+		return parseInt($.trim(segment),10);
 	};
 	
-	var contrast=function(rgb){
-		var contrastAccumulator=(function(){
+	var isDark=function(rgb){
+		var darkAccumulator=(function(){
 			var total=0;
 			return {
 				i: function(rgbPart){
 					total+=rgbPart;
 				},
 				o: function(){ 
-					return (total/3) < 0x77 ? 'FFF' : '000'; 
+					return (total/3) < 0x77; 
 				}
 			};
 		}());
-		return "#"+accumulate(contrastAccumulator,toRGBParts(rgb));
+		return accumulate(darkAccumulator,toRGBParts(rgb));
 	};
 	
 	var updateForeground=function(){
 		var b=$('body').css("background-color");
-		var c=contrast(b);
-		$('body').css({color: c});
+		$('body').toggleClass('dark',isDark(b));
 	};
 	
 	var compile=function(n,fhex,fdec){
@@ -82,17 +81,26 @@ var hexplus=function(){
 		return v.toString(16)
 	};
 	
+	var strictParseInt=function(str,base){
+		for(var i=1;i<str.length;i++){ //make sure characters after the first are numeric
+			if(isNaN(parseInt(str.charAt(i),base))){
+				return NaN;
+			}
+		}
+		return parseInt(str,base);
+	};
+	
 	var parseInput=function(input){
 		var n,hex,dec;
 		if(input.length>1 && input.charAt(0)==='t'){
 			dec=input.substr(1);
-			n=parseInt(dec);
+			n=strictParseInt(dec,10);
 			return compile(n,
 					toHexString,
 					function(){return dec;})
 		} else {
 			hex=input;
-			n=parseInt(hex,16);
+			n=strictParseInt(hex,16);
 			return compile(n,
 					function(){return hex},
 					function(v){return v.toString();});
@@ -133,9 +141,14 @@ var hexplus=function(){
 		describeNumber(n);
 	};
 	
-	var routeHashContent=function(winHash){
-		var hashBody=winHash.substr(1);
+	var routeEmptyHash=function(){
+		$('#query').val('');
+		blank();
+	};
+	
+	var routeHashContent=function(hashBody){
 		var n=parseInput(hashBody);
+		$('#query').val(hashBody);
 		if(!n){
 			describeNamedColor(hashBody);
 		} else if(isColor(n.hex)){
@@ -144,8 +157,12 @@ var hexplus=function(){
 			describeNumberOnly(n);
 		}
 	};
-	var decChunk=function(hex,i){
-		return parseInt(hex.substr(i,2),16).toString();
+	var decimalChunk=function(hex){
+		ret=[];
+		for(var i=0; i<3; i++){
+			ret[i]=parseInt(hex.substr(i*2,2),16).toString();
+		}
+		return ret;
 	};
 	var isDoubleChunk=function(hex,i){
 		return hex.charAt(i)===hex.charAt(i+1);
@@ -168,7 +185,7 @@ var hexplus=function(){
 	};
 	var describeColor=function(hex){
 		var norm=normalizeColorHex(hex);
-		$('#rgb').text(decChunk(norm,0)+' '+decChunk(norm,2)+' '+decChunk(norm,4));
+		$('#rgb').text(decimalChunk(norm).join(' '));
 	};
 	var blank=function(){
 		colorBackground('white');
@@ -183,9 +200,9 @@ var hexplus=function(){
 	var routeHash=function(){
 		var winHash=window.location.hash;
 		if(winHash.length>1){
-			routeHashContent(winHash);
+			routeHashContent(winHash.substr(1));
 		} else {
-			blank();
+			routeEmptyHash();
 		}
 	};
 	var updateHash=function(){
