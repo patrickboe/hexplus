@@ -70,7 +70,9 @@ def build():
     mediaDir=deployDir/"media"
     (srcDir / "content").copytree(deployDir / "content")
     (srcDir / "media").copytree(mediaDir)
-    (buildDir / "app.yaml").copy(deployDir / "app.yaml")
+    (buildDir / "htaccess").copy(deployDir / ".htaccess")
+    (mediaDir / "data" / "robots.txt").copy(deployDir / "robots.txt")
+    (mediaDir / "images" / "favicon.ico").copy(deployDir / "favicon.ico")
     options.update(options.get(options.targetEnv))
     configureFiles()
     combineName='app-%s' % options.version_name
@@ -95,4 +97,3 @@ def setlive():
 @needs('setlive','build')
 def deploy():
     "put the current application live"
-    appEngineCommand("appcfg.py",["update"])

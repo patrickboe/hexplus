@@ -12,5 +12,5 @@ live: {
  media_loc: "http://media.hexpl.us"
 }
 local: {
- media_loc: /media
+ media_loc: media
 }

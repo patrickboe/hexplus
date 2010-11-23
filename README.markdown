@@ -12,8 +12,6 @@ You need Paver and pyYAML. To install what you don't have yet, run:
 
 	pip install -r requirements.txt
 
-You also need to install the [Google App Engine SDK for Python](http://code.google.com/appengine/downloads.html#Google_App_Engine_SDK_for_Python).
-
 Make a copy of `/src/build/my_example.yaml` named `my.yaml`. Customize it for your environment.
  
 ##Build
@@ -22,10 +20,10 @@ from the project root do:
 	
 	paver build
 	
-##Run Locally
-
-	paver run
+This puts a local-runnable site in your deploy directory.
  
 ##Deploy
 	
 	paver deploy
+	
+This puts a deployable site in your deploy directory.

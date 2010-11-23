@@ -18,7 +18,7 @@ handlers:
   static_dir: media
   expiration: "365d"
   
-- url: /
+- url: "."
   upload: content/index.html
   static_files: content/index.html
   mime_type: text/html

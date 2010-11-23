@@ -1,0 +1,7 @@
+AddType image/x-icon .ico
+RewriteEngine on
+RewriteCond %{HTTP_HOST} !^hexpl\.us [NC]
+RewriteCond %{HTTP_HOST} !^$
+RewriteRule .* http://hexpl.us/$0 [L,R]
+RewriteRule ^$ content/index.html [L]
+RewriteRule ^[^\.]+$ content/$0.html [L]
