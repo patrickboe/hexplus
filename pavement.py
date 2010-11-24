@@ -17,22 +17,6 @@ options(
         targetEnv="local"
         )
 
-def appEngineCommand(pyname, args=[]):
-    def report(status):
-        sys.stderr.writelines(["%s: " % status, " ".join(cmd)])
-    cmd=[options.app_engine_python_executable, 
-        path(options.app_engine_path) / pyname]
-    cmd.extend(args)
-    cmd.append(deployDir.abspath())
-    try:
-        retcode=subprocess.call(cmd)
-        if retcode < 0:
-            report("terminated")
-        else:
-            report("completed")
-    except KeyboardInterrupt:
-        pass
-
 @task 
 def auto(): 
     "runs on every paver call"
@@ -82,12 +66,6 @@ def build():
              'jquery.ba-hashchange.min',
              'hex'
              ],combineName)
-    
-@task
-@needs('build')
-def run():
-    "start local google app engine server for this app"
-    appEngineCommand("dev_appserver.py",["--port=%d" % options.app_engine_portnum])
 
 @task
 def setlive():
