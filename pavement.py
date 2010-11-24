@@ -60,6 +60,7 @@ def build():
     options.update(options.get(options.targetEnv))
     configureFiles()
     combineName='app-%s' % options.version_name
+    (mediaDir / 'css' / 'hex.css').move(mediaDir / 'css' / '%s.css' % combineName)
     combine(mediaDir/"js",
             [
              'jquery.textchange.min',
