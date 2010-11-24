@@ -1,6 +1,7 @@
 body {color: #000; font-family: arial, verdana, sans-serif}
 body.dark { color: #FFF }
-ul{list-style: none; margin: .5em 0; padding: 0}
+ul{list-style: none; margin: .5em 0; padding: 1em; border: solid .2em #000; width: 25em;}
+.dark ul { color: #FFF }
 li{margin:0; padding:0}
 a, a:visited{ color: #0000EE }
 .dark a, .dark a:visited{ color: #add8e6 }

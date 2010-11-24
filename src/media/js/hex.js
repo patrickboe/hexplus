@@ -7,7 +7,7 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 var hexplus=function(){
-	var loaded=false;
+	var loadedQuery='';
 	var baseUrl=(function(){
 			var b=window.location.href.split('#')[0];
 			if(b.charAt(b.length-1)==='/'){
@@ -216,18 +216,16 @@ var hexplus=function(){
 		if(h.length>0 && h.charAt(0)==='#'){
 			h=(h.substr(1));
 		}
-		if(loaded && h.toLowerCase()===$('#query').val().toLowerCase()){
-			//hash is unchanged from current query, no routing needed
-			return;
-		}
 		routeQuery(h);
 	};
 	
 	var routeQuery=function(q){
-		if(q.length>0){
-			routeHashBody(q);
-		} else {
-			routeEmptyHash();
+		if(loadedQuery.toLowerCase()!==q.toLowerCase()){
+			if(q.length>0){
+				routeHashBody(q);
+			} else {
+				routeEmptyHash();
+			}
 		}
 	};
 	
@@ -239,7 +237,6 @@ var hexplus=function(){
 		$(window).hashchange(routeHash);
 		routeHash();
 		$('#query').bind("textchange",textQuery);
-		loaded=true;
 	});
 };
 
