@@ -7,6 +7,14 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 var hexplus=function(){
+	var loaded=false;
+	var baseUrl=(function(){
+			var b=window.location.href.split('#')[0];
+			if(b.charAt(b.length-1)==='/'){
+				b = b.substr(0,b.length-1);
+			}
+			return b;
+		}());
 	var colorBackground=function(color){
 		$('body').css({background: color});
 		updateForeground();
@@ -126,19 +134,18 @@ var hexplus=function(){
 		}
 		n=parseInput(rgbToHex(renderedColor));
 		describeColor(n.hex);
-		describeNumber(n);
+		accept(n);
 	};
 	
 	var describeHexColor=function(n){
 		colorBackground('#'+n.hex);
-		describeNumber(n);
 		describeColor(n.hex);
+		accept(n);
 	};
 	
 	var describeNumberOnly=function(n){
-		colorBackground('#FFFFFF');
-		describeColorless();
-		describeNumber(n);
+		whiteout();
+		accept(n);
 	};
 	
 	var routeEmptyHash=function(){
@@ -146,7 +153,7 @@ var hexplus=function(){
 		blank();
 	};
 	
-	var routeHashContent=function(hashBody){
+	var routeHashBody=function(hashBody){
 		var n=parseInput(hashBody);
 		$('#query').val(hashBody);
 		if(!n){
@@ -167,7 +174,8 @@ var hexplus=function(){
 	var isDoubleChunk=function(hex,i){
 		return hex.charAt(i)===hex.charAt(i+1);
 	};
-	var describeColorless=function(){
+	var whiteout=function(){
+		colorBackground('white');
 		$('#rgb').text('none');
 	};
 	var twice=function(c){
@@ -188,31 +196,50 @@ var hexplus=function(){
 		$('#rgb').text(decimalChunk(norm).join(' '));
 	};
 	var blank=function(){
-		colorBackground('white');
-		describeColorless();
+		whiteout();
 		$('#hex').text('none');
 		$('#decimal').text('none');
+		$('#lookupUrl').attr('href',baseUrl).text(baseUrl);
+	};
+	var accept=function(n){
+		var lookupUrl=baseUrl+'#'+$('#query').val();
+		$('#lookupUrl').attr('href',lookupUrl).text(lookupUrl);
+		describeNumber(n);
 	};
 	var describeNumber=function(nInfo){
 		$('#hex').text(nInfo.hex);
 		$('#decimal').text(nInfo.dec);
 	};
+	
 	var routeHash=function(){
-		var winHash=window.location.hash;
-		if(winHash.length>1){
-			routeHashContent(winHash.substr(1));
+		var h=window.location.hash;
+		if(h.length>0 && h.charAt(0)==='#'){
+			h=(h.substr(1));
+		}
+		if(loaded && h.toLowerCase()===$('#query').val().toLowerCase()){
+			//hash is unchanged from current query, no routing needed
+			return;
+		}
+		routeQuery(h);
+	};
+	
+	var routeQuery=function(q){
+		if(q.length>0){
+			routeHashBody(q);
 		} else {
 			routeEmptyHash();
 		}
 	};
-	var updateHash=function(){
-		window.location.hash=$(this).val();
+	
+	var textQuery=function(){
+		routeQuery($(this).val());
 	};
 	
 	$(function(){
 		$(window).hashchange(routeHash);
 		routeHash();
-		$('#query').bind("textchange",updateHash);
+		$('#query').bind("textchange",textQuery);
+		loaded=true;
 	});
 };
 
