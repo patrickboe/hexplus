@@ -65,14 +65,15 @@ var hexplus=function(){
 		$('body').toggleClass('dark',isDark(b));
 	};
 	
-	var compile=function(n,fhex,fdec){
+	var compile=function(n,fhex,fdec,foct){
 		if(isNaN(n)){
 			return null;
 		} else {
 			return {
 				val: n,
 				hex: fhex(n),
-				dec: fdec(n)
+				dec: fdec(n),
+				oct: foct(n)
 			};
 		}
 	};
@@ -85,8 +86,17 @@ var hexplus=function(){
 		return "0" + hexString;
 	};
 	
-	var toHexString=function(v){
-		return v.toString(16)
+	var rebaser=function(b){
+		return function(v){
+			return v.toString(b);
+		};
+	};
+	
+	var toOctString=rebaser(8), toHexString=rebaser(16), toDecString=rebaser(10);
+	var identityMaker=function(x){
+		return function(){
+			return x;
+		};
 	};
 	
 	var strictParseInt=function(str,base){
@@ -98,21 +108,37 @@ var hexplus=function(){
 		return parseInt(str,base);
 	};
 	
-	var parseInput=function(input){
-		var n,hex,dec;
-		if(input.length>1 && input.charAt(0)==='t'){
-			dec=input.substr(1);
-			n=strictParseInt(dec,10);
-			return compile(n,
+	var specialParsers={
+		t: function(str){
+			return compile(strictParseInt(str,10),
 					toHexString,
-					function(){return dec;})
-		} else {
-			hex=input;
-			n=strictParseInt(hex,16);
-			return compile(n,
-					function(){return hex},
-					function(v){return v.toString();});
+					identityMaker(str),
+					toOctString);
+		},
+		o: function(str){
+			return compile(strictParseInt(str,8),
+					toHexString,
+					toDecString,
+					identityMaker(str));
 		}
+	};
+	
+	var hexParser=function(str){
+		return compile(strictParseInt(str,16),
+				identityMaker(str),
+				toDecString,
+				toOctString);
+	};
+	
+	var parseInput=function(input){
+		var prefix;
+		if(input.length>1){
+			prefix=input.charAt(0);
+			if(specialParsers.hasOwnProperty(prefix)){
+				return specialParsers[prefix](input.substr(1));
+			}
+		}
+		return hexParser(input);
 	};
 	
 	var isColor=function(hex){
@@ -199,13 +225,15 @@ var hexplus=function(){
 		whiteout();
 		$('#hex').text('none');
 		$('#decimal').text('none');
+		$('#oct').text('none');
 	};
 	var accept=function(n){
 		describeNumber(n);
 	};
 	var describeNumber=function(nInfo){
-		$('#hex').text(nInfo.hex);
+		$('#hex').text(nInfo.hex.toUpperCase());
 		$('#decimal').text(nInfo.dec);
+		$('#oct').text(nInfo.oct);
 	};
 	
 	var routeHash=function(){
@@ -217,9 +245,8 @@ var hexplus=function(){
 	};
 	
 	var routeQuery=function(q){
-		q=q.toLowerCase();
-		if(loadedQuery!==q){
-			loadedQuery=q;
+		if(loadedQuery!==q.toLowerCase()){
+			loadedQuery=q.toLowerCase();
 			updateLink(q);
 			if(q.length>0){
 				routeHashBody(q);
