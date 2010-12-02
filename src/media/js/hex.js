@@ -66,7 +66,7 @@ var hexplus=function(){
 	};
 	
 	var toPaddedHex=function(v){
-		var hexString=toHexString(v);
+		var hexString=rebasers[16](v);
 		if(hexString.length===2){
 			return hexString;
 		}
@@ -79,8 +79,12 @@ var hexplus=function(){
 		};
 	};
 	
-	var toOctString=rebaser(8), toHexString=rebaser(16), toDecString=rebaser(10);
-	var identityMaker=function(x){
+	var rebasers=[];
+	rebasers[8]=rebaser(8);
+	rebasers[16]=rebaser(16);
+	rebasers[10]=rebaser(10);
+	
+	var constant=function(x){
 		return function(){
 			return x;
 		};
@@ -96,16 +100,18 @@ var hexplus=function(){
 	};
 	
 	var makeParser=function(base){
+		var views=rebasers.slice(0);
 		return function(str){
 			var n=strictParseInt(str,base);
 			if(isNaN(n)){
 				return null;
 			} else {
+				views[base]=constant(str); //the view for an identical base is the identity
 				return {
 					val: n,
-					hex: toHexString(n),
-					dec: toDecString(n),
-					oct: toOctString(n)
+					hex: views[16](n),
+					dec: views[10](n),
+					oct: views[8](n)
 				};
 			}
 		}
