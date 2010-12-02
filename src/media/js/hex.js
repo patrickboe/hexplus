@@ -199,11 +199,8 @@ var hexplus=function(){
 		whiteout();
 		$('#hex').text('none');
 		$('#decimal').text('none');
-		$('#lookupUrl').attr('href',baseUrl).text(baseUrl);
 	};
 	var accept=function(n){
-		var lookupUrl=baseUrl+'#'+$('#query').val();
-		$('#lookupUrl').attr('href',lookupUrl).text(lookupUrl);
 		describeNumber(n);
 	};
 	var describeNumber=function(nInfo){
@@ -223,12 +220,21 @@ var hexplus=function(){
 		q=q.toLowerCase();
 		if(loadedQuery!==q){
 			loadedQuery=q;
+			updateLink(q);
 			if(q.length>0){
 				routeHashBody(q);
 			} else {
 				routeEmptyHash();
 			}
 		}
+	};
+	
+	var updateLink=function(q){
+		var lookupUrl=baseUrl;
+		if(/^\w+$/i.test(q)){ //accept only alphanumeric characters in query
+			lookupUrl+='#'+q;
+		}
+		$('#lookupUrl').attr('href',lookupUrl).text(lookupUrl);
 	};
 	
 	var textQuery=function(){
