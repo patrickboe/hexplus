@@ -220,7 +220,9 @@ var hexplus=function(){
 	};
 	
 	var routeQuery=function(q){
-		if(loadedQuery.toLowerCase()!==q.toLowerCase()){
+		q=q.toLowerCase();
+		if(loadedQuery!==q){
+			loadedQuery=q;
 			if(q.length>0){
 				routeHashBody(q);
 			} else {
