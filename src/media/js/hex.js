@@ -65,19 +65,6 @@ var hexplus=function(){
 		$('body').toggleClass('dark',isDark(b));
 	};
 	
-	var compile=function(n,fhex,fdec,foct){
-		if(isNaN(n)){
-			return null;
-		} else {
-			return {
-				val: n,
-				hex: fhex(n),
-				dec: fdec(n),
-				oct: foct(n)
-			};
-		}
-	};
-	
 	var toPaddedHex=function(v){
 		var hexString=toHexString(v);
 		if(hexString.length===2){
@@ -108,27 +95,28 @@ var hexplus=function(){
 		return parseInt(str,base);
 	};
 	
-	var specialParsers={
-		t: function(str){
-			return compile(strictParseInt(str,10),
-					toHexString,
-					identityMaker(str),
-					toOctString);
-		},
-		o: function(str){
-			return compile(strictParseInt(str,8),
-					toHexString,
-					toDecString,
-					identityMaker(str));
+	var makeParser=function(base){
+		return function(str){
+			var n=strictParseInt(str,base);
+			if(isNaN(n)){
+				return null;
+			} else {
+				return {
+					val: n,
+					hex: toHexString(n),
+					dec: toDecString(n),
+					oct: toOctString(n)
+				};
+			}
 		}
 	};
 	
-	var hexParser=function(str){
-		return compile(strictParseInt(str,16),
-				identityMaker(str),
-				toDecString,
-				toOctString);
+	var specialParsers={
+		t: makeParser(10),
+		o: makeParser(8)
 	};
+	
+	var hexParser=makeParser(16);
 	
 	var parseInput=function(input){
 		var prefix;
@@ -223,9 +211,7 @@ var hexplus=function(){
 	};
 	var blank=function(){
 		whiteout();
-		$('#hex').text('none');
-		$('#decimal').text('none');
-		$('#oct').text('none');
+		$('#hex,#decimal,#oct').text('none');
 	};
 	var accept=function(n){
 		describeNumber(n);
